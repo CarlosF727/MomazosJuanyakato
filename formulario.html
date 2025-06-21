@@ -233,11 +233,16 @@ document.getElementById("reporte-form").addEventListener("submit", async functio
     return;
   }
 
-  if (!descripcion || descripcion.length < 5) {
+  if (!descripcion || descripcion.length < 5 || typeof descripcion !== "string") {
     alert("Por favor describe brevemente el problema.");
     return;
   }
 
+  const safeDescription = description.replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
 
   let imagenURL = "";
   try {
@@ -250,7 +255,7 @@ document.getElementById("reporte-form").addEventListener("submit", async functio
 
   const data = {
     barrio,
-    descripcion,
+    safeDescription,
     latitud: coords.lat,
     longitud: coords.lng,
     imagenURL: imagenURL
