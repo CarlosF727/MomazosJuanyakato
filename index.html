@@ -110,7 +110,6 @@
     <script>
       let mapaModal;
       const sanitizeString = (string) => {
-        if(typeof string =="string") return;
         const safeString = string
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
@@ -133,7 +132,7 @@
 
           data.forEach((reporte) => {
             const div = document.createElement("div");
-            
+
             div.innerHTML = `
           <strong>Barrio:</strong> ${sanitizeString(reporte.barrio) ?? 'error'}<br>
           <strong>Descripción:</strong> ${sanitizeString(reporte.descripcion ?? 'error')}<br>
