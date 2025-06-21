@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FixMyCity - Página Principal</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 12px 24px;
+      margin: 20px;
+      border-radius: 8px;
+      border: none;
+      background-color: #0077cc;
+      color: white;
+      cursor: pointer;
+    }
+
+    #contenedor-reportes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .reporte {
+    background-color: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .reporte:hover {
+    transform: scale(1.02);
+  }
+
+  .reporte img {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  /* Modal */
+  #modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+  }
+
+  #modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  #modal-map {
+    height: 300px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  #modal-close {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+    
+  </style>
+</head>
+<body>
+
+  <h1>FixMyCity</h1>
+
+   <!-- <a href="formulario.html" style="display:inline-block; margin-bottom:20px; text-decoration:none; background:#007bff; color:white; padding:10px 15px; border-radius:8px;">📤 Subir nuevo reporte</a>
+-->
+  <button onclick="verReportes()">📄 Ver Reportes</button>
+  <button onclick="irAFormulario()">📝 Subir Reporte</button>
+
+  <div id="contenedor-reportes"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  let mapaModal;
+
+  async function verReportes() {
+    const contenedor = document.getElementById("contenedor-reportes");
+    contenedor.innerHTML = "Cargando reportes...";
+
+    try {
+      const response = await fetch("https://bh49piq5y4.execute-api.us-east-1.amazonaws.com/prod/ver-reportes"); 
+      const data = await response.json();
+      contenedor.innerHTML = "";
+
+      data.forEach(reporte => {
+        const div = document.createElement("div");
+        div.className = "reporte";
+        div.innerHTML = `
+          <strong>Barrio:</strong> ${reporte.barrio}<br>
+          <strong>Descripción:</strong> ${reporte.descripcion}<br>
+          <strong>Fecha:</strong> ${new Date(reporte.fecha).toLocaleString()}<br>
+          ${reporte.imagen_url ? `<img src="${reporte.imagen_url}" alt="Imagen del reporte">` : ''}
+        `;
+
+        div.addEventListener("click", () => mostrarModal(reporte));
+        contenedor.appendChild(div);
+      });
+
+    } catch (err) {
+      contenedor.innerHTML = "Error al cargar los reportes.";
+      console.error(err);
+    }
+  }
+
+function irAFormulario() {
+    window.location.href = "formulario.html";
+  }
+
+  function mostrarModal(reporte) {
+    const modal = document.getElementById("modal");
+    const info = document.getElementById("modal-info");
+    const mapDiv = document.getElementById("modal-map");
+
+    info.innerHTML = `
+      <h3>Detalle del Reporte</h3>
+      <p><strong>Barrio:</strong> ${reporte.barrio}</p>
+      <p><strong>Descripción:</strong> ${reporte.descripcion}</p>
+      <p><strong>Fecha:</strong> ${new Date(reporte.fecha).toLocaleString()}</p>
+      ${reporte.imagen_url ? `<img src="${reporte.imagen_url}" style="max-width:100%; margin-top:10px;">` : ''}
+    `;
+
+    modal.style.display = "flex";
+
+    setTimeout(() => {
+  if (mapaModal) {
+    mapaModal.remove(); // eliminar el mapa anterior si existe
+  }
+  mapaModal = L.map('modal-map').setView([reporte.latitud, reporte.longitud], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(mapaModal);
+
+  L.marker([reporte.latitud, reporte.longitud]).addTo(mapaModal);
+
+  setTimeout(() => {
+      mapaModal.invalidateSize();
+    }, 200);
+
+  }, 100); // tiempo mínimo para asegurar que el div es visible
+}
+
+
+
+window.onload = function () {
+  document.getElementById("modal-close").onclick = () => {
+    document.getElementById("modal").style.display = "none";
+    if (mapaModal) {
+      mapaModal.remove();
+      mapaModal = null;
+    }
+
+  document.getElementById("modal-map").innerHTML = "";
+
+  };
+};
+</script>
+
+  <div id="modal">
+  <div id="modal-content">
+    <span id="modal-close">&times;</span>
+    <div id="modal-info"></div>
+    <div id="modal-map"></div>
+  </div>
+</div>
+</body>
+</html>
