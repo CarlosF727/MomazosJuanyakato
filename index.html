@@ -112,6 +112,16 @@
   async function verReportes() {
     const contenedor = document.getElementById("contenedor-reportes");
     contenedor.innerHTML = "Cargando reportes...";
+    const sanitizeString = (string) => {
+       const safeString = string
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+
+        return safeString
+      };
 
     try {
       const response = await fetch("https://bh49piq5y4.execute-api.us-east-1.amazonaws.com/prod/ver-reportes"); 
@@ -121,11 +131,22 @@
       data.forEach(reporte => {
         const div = document.createElement("div");
         div.className = "reporte";
+
         div.innerHTML = `
-          <strong>Barrio:</strong> ${reporte.barrio}<br>
-          <strong>Descripción:</strong> ${reporte.descripcion}<br>
-          <strong>Fecha:</strong> ${new Date(reporte.fecha).toLocaleString()}<br>
-          ${reporte.imagen_url ? `<img src="${reporte.imagen_url}" alt="Imagen del reporte">` : ''}
+          <strong>Barrio:</strong> ${
+            sanitizeString(reporte.barrio) ?? "error"
+          }<br>
+          <strong>Descripción:</strong> ${sanitizeString(
+            reporte.descripcion ?? "error"
+          )}<br>
+          <strong>Fecha:</strong> ${new Date(
+            reporte.fecha
+          ).toLocaleString()}<br>
+          ${
+            reporte.imagen_url
+              ? `<img src="${reporte.imagen_url}" alt="Imagen del reporte">`
+              : ""
+          }
         `;
 
         div.addEventListener("click", () => mostrarModal(reporte));
