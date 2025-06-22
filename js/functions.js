@@ -1,6 +1,7 @@
 // index.html
 
 let mapaModal;
+const allowedExtension = 'image';
 
 async function verReportes() {
   const contenedor = document.getElementById("contenedor-reportes");
@@ -190,6 +191,8 @@ function enviarReporte() {
 async function subirImagenAS3(archivo) {
   const nombreUnico = `${Date.now()}_${archivo.name}`;
   const url = `https://fixmycity-imagenes.s3.amazonaws.com/${nombreUnico}`;
+  const fileType = archivo.type.split("/")
+  if (fileType[0] !== allowedExtension) return false;
 
   await fetch(url, {
     method: "PUT",
@@ -222,10 +225,12 @@ document.getElementById("reporte-form").addEventListener("submit", async functio
     return;
   }
 
-
   let imagenURL = "";
   try {
-    imagenURL = await subirImagenAS3(imagen); // Esta función ya debe estar definida antes
+    imagenURL = await subirImagenAS3(imagen); 
+    if (!imagenURL) {
+      throw new Error("Invalid format"); 
+    }
   } catch (err) {
     console.error("Error al subir imagen:", err);
     alert("Ocurrió un error al subir la imagen.");
@@ -241,6 +246,7 @@ document.getElementById("reporte-form").addEventListener("submit", async functio
   };
 
   try {
+    console.log(imagenURL)
     const response = await fetch("https://bh49piq5y4.execute-api.us-east-1.amazonaws.com/prod/reportes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
