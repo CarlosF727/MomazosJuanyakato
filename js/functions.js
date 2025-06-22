@@ -2,10 +2,6 @@
 
 let mapaModal;
 const allowedExtension = 'image';
-
-async function verReportes() {
-  const contenedor = document.getElementById("contenedor-reportes");
-  contenedor.innerHTML = "Cargando reportes...";
   const sanitizeString = (string) => {
     const safeString = string
       .replace(/&/g, "&amp;")
@@ -16,6 +12,10 @@ async function verReportes() {
 
     return safeString
   };
+
+async function verReportes() {
+  const contenedor = document.getElementById("contenedor-reportes");
+  contenedor.innerHTML = "Cargando reportes...";
 
   try {
     const response = await fetch("https://bh49piq5y4.execute-api.us-east-1.amazonaws.com/prod/ver-reportes");
@@ -30,8 +30,8 @@ async function verReportes() {
           <strong>Barrio:</strong> ${sanitizeString(reporte.barrio) ?? "error"
         }<br>
           <strong>Descripción:</strong> ${sanitizeString(
-          reporte.descripcion ?? "error"
-        )}<br>
+          reporte.descripcion) ?? "error"
+        }<br>
           <strong>Fecha:</strong> ${new Date(
           reporte.fecha
         ).toLocaleString()}<br>
@@ -62,8 +62,10 @@ function mostrarModal(reporte) {
 
   info.innerHTML = `
       <h3>Detalle del Reporte</h3>
-      <p><strong>Barrio:</strong> ${reporte.barrio}</p>
-      <p><strong>Descripción:</strong> ${reporte.descripcion}</p>
+      <p><strong>Barrio:</strong> ${sanitizeString(reporte.barrio) ?? "error"}</p>
+      <p><strong>Descripción:</strong> ${sanitizeString(
+    reporte.descripcion) ?? "error"
+    }}</p>
       <p><strong>Fecha:</strong> ${new Date(reporte.fecha).toLocaleString()}</p>
       ${reporte.imagen_url ? `<img src="${reporte.imagen_url}" style="max-width:100%; margin-top:10px;">` : ''}
     `;
@@ -227,9 +229,9 @@ document.getElementById("reporte-form").addEventListener("submit", async functio
 
   let imagenURL = "";
   try {
-    imagenURL = await subirImagenAS3(imagen); 
+    imagenURL = await subirImagenAS3(imagen);
     if (!imagenURL) {
-      throw new Error("Invalid format"); 
+      throw new Error("Invalid format");
     }
   } catch (err) {
     console.error("Error al subir imagen:", err);
