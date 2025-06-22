@@ -1,31 +1,21 @@
 name: 'Deploy juanyakato momazos'
-
 on:
   push:
-      branch: ["main"]
-
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 jobs:
   deploy:
     name: "AWS deploy"
     runs-on: ubuntu-latest
-
-
-  steps:
-
-  - name: Checkout
-    uses: actions/checkout@v3
-
-  - name: Terraform
-    uses: hashicorp/setup-terraform@v3
-    with:
-      terraform_version: "1.6.0"
-
-  - name: Aws credentials
-    uses: aws-actions/configure-aws-credentials@v4
-    with:
-      aws-access-key-id: ${{ secrets.MEHACKEARON_KEY }}
-      aws-secret-access-key: ${{ secrets.SECRET }}
-      aws-region: "us-east-1"
-
-  - name: Sync s3 bucket
-    run: aws s3 sync . s3://${{ secrets.BUCKET_NAME }} --excluce ".github/*" --exclude "node_modules/*"
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.MEHACKEARON_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET }}
+        aws-region: "us-east-1"
+    - name: Sync s3 bucket
+      run: aws s3 sync . s3://${{ secrets.BUCKET_NAME }} --exclude ".github/*" --exclude "node_modules/*"
