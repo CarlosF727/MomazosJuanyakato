@@ -65,7 +65,7 @@ function mostrarModal(reporte) {
       <p><strong>Barrio:</strong> ${sanitizeString(reporte.barrio) ?? "error"}</p>
       <p><strong>Descripción:</strong> ${sanitizeString(
     reporte.descripcion) ?? "error"
-    }}</p>
+    }</p>
       <p><strong>Fecha:</strong> ${new Date(reporte.fecha).toLocaleString()}</p>
       ${reporte.imagen_url ? `<img src="${reporte.imagen_url}" style="max-width:100%; margin-top:10px;">` : ''}
     `;
