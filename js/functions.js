@@ -26,23 +26,23 @@ async function verReportes() {
       const div = document.createElement("div");
       div.className = "reporte";
 
+      const claseEstado =
+       reporte.estado === 'resuelto' ? 'estado-resuelto' :
+       reporte.estado === 'en revisión' ? 'estado-revision' :
+       'estado-pendiente';
+
       div.innerHTML = `
-          <strong>Barrio:</strong> ${sanitizeString(reporte.barrio) ?? "error"
-        }<br>
-          <strong>Descripción:</strong> ${sanitizeString(
-          reporte.descripcion) ?? "error"
-        }<br>
-          <strong>Fecha:</strong> ${new Date(
-          reporte.fecha
-        ).toLocaleString()}<br>
-         <strong>Estado:</strong> <span class="estado ${reporte.estado === 'resuelto' ? 'estado-resuelto' : 'estado-pendiente'}">
+       <strong>Barrio:</strong> ${sanitizeString(reporte.barrio) ?? "error"}<br>
+       <strong>Descripción:</strong> ${sanitizeString(reporte.descripcion) ?? "error"}<br>
+       <strong>Fecha:</strong> ${new Date(reporte.fecha).toLocaleString()}<br>
+       <strong>Estado:</strong> <span class="estado ${claseEstado}">
         ${sanitizeString(reporte.estado || 'pendiente')}
-        </span><br>
-          ${reporte.imagen_url
-          ? `<span class="helper"></span><img src="${reporte.imagen_url}" alt="Imagen del reporte">`
-          : ""
-        }
-        `;
+      </span><br>
+      ${reporte.imagen_url
+        ? `<span class="helper"></span><img src="${reporte.imagen_url}" alt="Imagen del reporte">`
+        : ""}
+      `;
+
 
       div.addEventListener("click", () => mostrarModal(reporte));
       contenedor.appendChild(div);

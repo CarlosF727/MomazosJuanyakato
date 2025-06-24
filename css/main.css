@@ -107,6 +107,11 @@ button {
   color: #721c24;
 }
 
+.estado-revision {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
 .estado-resuelto {
   background-color: #d4edda;
   color: #155724;
