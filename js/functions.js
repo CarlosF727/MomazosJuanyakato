@@ -35,6 +35,8 @@ async function verReportes() {
           <strong>Fecha:</strong> ${new Date(
           reporte.fecha
         ).toLocaleString()}<br>
+        <strong>Estado:</strong> ${sanitizeString(reporte.estado || 'pendiente')
+        }<br>
           ${reporte.imagen_url
           ? `<span class="helper"></span><img src="${reporte.imagen_url}" alt="Imagen del reporte">`
           : ""
