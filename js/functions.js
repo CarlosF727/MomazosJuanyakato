@@ -142,6 +142,7 @@ function volverALaUbicacion() {
         const coords = [lat, lon];
         map.setView(coords, 16);
         setOrMoveMarker(coords);
+      document.getElementById("otro").selected=true
     }, function () {
         alert("No se pudo obtener tu ubicación.");
     });
