@@ -149,7 +149,7 @@ function volverALaUbicacion() {
         alert("Tu navegador no soporta geolocalización.");
     }
 }
-
+document.getElementById("monda").addEventListener("click",() => volverALaUbicacion())
 // Coloca o mueve el marcador, haciéndolo arrastrable
 function setOrMoveMarker(coords) {
   if (userMarker) {
