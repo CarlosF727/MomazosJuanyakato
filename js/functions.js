@@ -136,7 +136,7 @@ document.getElementById("barrio").addEventListener("change", function () {
 
 function volverALaUbicacion() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition( (position)=> {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
         const coords = [lat, lon];
@@ -149,7 +149,10 @@ function volverALaUbicacion() {
         alert("Tu navegador no soporta geolocalización.");
     }
 }
-document.getElementById("monda").addEventListener("click",() => volverALaUbicacion())
+document.getElementById("monda").addEventListener("click",(e) => {
+e.preventDefault()
+volverALaUbicacion()
+} )
 // Coloca o mueve el marcador, haciéndolo arrastrable
 function setOrMoveMarker(coords) {
   if (userMarker) {
