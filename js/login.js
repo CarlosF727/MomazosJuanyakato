@@ -1,6 +1,6 @@
 const ADMIN_CREDENCIALES = {
   usuario: "admin",
-  clave: "123456" 
+  clave: "quehacesaquiamigo" 
 };
 
 document.getElementById("login-form").addEventListener("submit", function (e) {
