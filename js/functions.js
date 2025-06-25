@@ -134,8 +134,6 @@ document.getElementById("barrio").addEventListener("change", function () {
 });
 
 
-
-Función para usar ubicación actual
 function volverALaUbicacion() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
