@@ -213,7 +213,7 @@ async function subirImagenAS3(archivo) {
 
 let imagenBase64 = null;
 
-document.getElementById("nggr").addEventListener("submit", async function (e) {
+document.getElementById("reporte-form").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const barrio = document.getElementById("barrio").value;
