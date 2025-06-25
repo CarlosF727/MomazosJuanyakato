@@ -1,3 +1,8 @@
+if (localStorage.getItem("sesion_admin") !== "activa") {
+  alert("Acceso no autorizado. Redirigiendo...");
+  window.location.href = "index.html"; 
+}
+
 async function cargarReportes() {
   const contenedor = document.getElementById("contenedor-reportes");
 
@@ -63,6 +68,11 @@ async function cambiarEstado(id, nuevoEstado) {
     console.error(err);
     alert("Error al actualizar el estado.");
   }
+}
+
+function cerrarSesion() {
+  localStorage.removeItem("sesion_admin");
+  window.location.href = "index.html";
 }
 
 window.onload = cargarReportes;

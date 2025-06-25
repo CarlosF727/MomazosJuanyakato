@@ -116,3 +116,24 @@ button {
   background-color: #d4edda;
   color: #155724;
 }
+
+#admin-login {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+#admin-login a {
+  text-decoration: none;
+  background-color: #0077cc;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+#admin-login a:hover {
+  background-color: #005fa3;
+}
