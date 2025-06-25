@@ -135,8 +135,8 @@ document.getElementById("barrio").addEventListener("change", function () {
 
 
 
-// Función para usar ubicación actual
-/*function volverALaUbicacion() {
+Función para usar ubicación actual
+function volverALaUbicacion() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
         const lat = position.coords.latitude;
@@ -151,7 +151,7 @@ document.getElementById("barrio").addEventListener("change", function () {
         alert("Tu navegador no soporta geolocalización.");
     }
 }
- */
+
 // Coloca o mueve el marcador, haciéndolo arrastrable
 function setOrMoveMarker(coords) {
   if (userMarker) {
