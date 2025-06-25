@@ -239,7 +239,6 @@ document.getElementById("reporte-form").addEventListener("submit", async functio
     }
   } catch (err) {
     console.error("Error al subir imagen:", err);
-    alert("Ocurrió un error al subir la imagen.");
   }
 
   const data = {
